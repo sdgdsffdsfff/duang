@@ -4,10 +4,15 @@ def(() => class extends Jinkela {
       this.element.addEventListener('click', event => this.click(event));
     }
   }
+  set onclick(handler) {
+    if (this.onClick) return;
+    this.onClick = handler;
+    this.element.addEventListener('click', event => this.click(event));
+  }
   static cast(list, ...args) {
     list = list.map(item => new this(item, ...args));
-    list.renderTo = target => {
-      list.forEach(item => item.renderTo(target));
+    list.to = target => {
+      list.forEach(item => item.to(target));
       return list;
     };
     return list;
@@ -16,8 +21,8 @@ def(() => class extends Jinkela {
     if (this.element.classList.contains('busy')) return;
     if (typeof this.onClick !== 'function') return;
     this.element.classList.add('busy');
-    let that = this.onClick(event);
-    if (that && that.then) {
+    let what = this.onClick(event);
+    if (what && what.then) {
       what.catch(() => {}).then(() => {
         this.element.classList.remove('busy');
       });

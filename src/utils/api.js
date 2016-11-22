@@ -15,7 +15,7 @@
         if (item && base[base.length - 1] !== '/') base += '/';
         return base + item;
       });
-    };
+    }
     extendOptions(options) {
       options = Object.assign({ credentials: 'include' }, options);
       if (options.body) {
@@ -37,8 +37,14 @@
     }
     get basePath() {
       let value = [ location.origin + location.pathname.replace(/[^/]*$/, 'api') ];
-      const element = document.querySelector('[config]');
-      if (element) value.push(element.getAttribute('config'));
+      let baseElement = document.querySelector('script[base]');
+      let base = baseElement && baseElement.getAttribute('base');
+      if (!base) {
+        let configElement = document.querySelector('script[config]');
+        let config = configElement && configElement.getAttribute('config') || '';
+        base = config.replace(/[^/]*$/, '');
+      }
+      if (base) value.push(base);
       Object.defineProperty(this, 'basePath', { value });
       return value;
     }

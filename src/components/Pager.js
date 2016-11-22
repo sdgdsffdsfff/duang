@@ -1,12 +1,25 @@
-def((Button) => class extends Jinkela {
-  init() {
+def((ButtonHollow) => class extends Jinkela {
+  get Button() { return ButtonHollow; }
+  get template() {
+    return `
+      <div>
+        <jkl-button disabled="{disablePrev}" onclick="{prev}">&lt;</jkl-button>
+        <span>{currentPage}</span>
+        <jkl-button disabled="{disableNext}" onclick="{next}">&gt;</jkl-button>
+      </div>
+    `;
+  }
+  set data(list) {
+    if (!(list instanceof Array)) list = [];
+    let depot = this.depot;
     let page = this.page = +depot.uParams.page || 1;
-    let canPrev = page > 1;
-    let canNext = this.list.length === depot.scheme.pageSize;
-    if (!canPrev && !canNext) return this.element.style.display = 'none';
-    if (canPrev) new Button({ text: 'Prev', onClick: () => this.prev() }).renderTo(this);
-    new Jinkela({ init() { this.element.textContent = page; } }).renderTo(this);
-    if (canNext) new Button({ text: 'Next', onClick: () => this.next() }).renderTo(this);
+    this.disablePrev = page <= 1;
+    this.disableNext = list.length < depot.scheme.pageSize;
+    this.currentPage = page;
+  }
+  set pagesize(size) {
+    this.pageSize = size;
+    this.element.style.display = size ? 'block' : 'none';
   }
   next() {
     let params = new UParams();
@@ -25,11 +38,14 @@ def((Button) => class extends Jinkela {
   get styleSheet() {
     return `
       :scope {
+        display: none;
         text-align: right;
         margin: 1em;
-        > * {
+        > span {
+          line-height: 28px;
+          vertical-align: middle;
           display: inline-block;
-          margin-left: 1em;
+          margin: 0 .5em;
         }
       }
     `;

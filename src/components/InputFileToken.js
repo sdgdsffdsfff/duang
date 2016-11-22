@@ -1,10 +1,17 @@
 def((Button) => {
 
   class SpanButton extends Button {
-    get tag() { return 'span'; }
+    get tagName() { return 'span'; }
+    get styleSheet() {
+      return `
+        :scope {
+          display: inline-block;
+        }
+      `;
+    }
   }
 
-  class CancelButton extends Jinkela {
+  class ClearButton extends Jinkela {
     init() {
       this.element.addEventListener('click', this.onClick);
     }
@@ -12,7 +19,7 @@ def((Button) => {
     get styleSheet() {
       return `
         :scope {
-          vertical-align: middle;
+          vertical-align: top;
           margin-left: 1em;
         }
       `;
@@ -20,7 +27,7 @@ def((Button) => {
   }
 
   class Preview extends Jinkela {
-    get template() { return `<a target="_blank" href="JavaScript:"><img ></a>`; }
+    get template() { return `<a target="_blank" href="JavaScript:"><img/></a>`; }
     set token(token) {
       if (token) {
         api([ this.api, token ]).then(result => {
@@ -30,20 +37,30 @@ def((Button) => {
           this.element.firstChild.src = url;
         });
       } else {
-        this.element.style.display = 'none';
+        // this.element.style.display = 'none';
       }
     }
     get styleSheet() {
       return `
         :scope {
-          img {
-            display: none;
-            max-width: ${this.maxWidth || '50px'};
-            max-height: ${this.maxHeight || '50px'};
+          display: inline-block;
+          width: 28px;
+          height: 28px;
+          margin-left: .5em;
+          vertical-align: top;
+          text-align: center;
+          &::after {
+            content: '';
             display: inline-block;
+            height: 100%;
+            width: 0px;
             vertical-align: middle;
-            border-radius: 100%;
-            margin-left: .5em;
+          }
+          img[src] {
+            width: 28px;
+            height: 28px;
+            display: inline-block;
+            box-shadow: 0 0 1px #E5E9F2;
           }
         }
       `;
@@ -51,26 +68,34 @@ def((Button) => {
   }
 
   return class extends Jinkela {
+    get SpanButton() { return SpanButton; }
+    get Preview() { return Preview; }
+    get ClearButton() { return ClearButton; }
     get value() { return this.$value; }
     set value(value) {
       this.$value = value;
-      this.preview.token = value;
+      this.token = value;
     }
     get template() {
       return `
-        <div><label ref="label"><input ref="input" type="file" /></label></div>
+        <div token="{token}">
+          <label ref="label">
+            <input ref="input" type="file" style="display: none;" />
+            <jkl-span-button ref="button" text="{text}"></jkl-span-button>
+          </label>
+          <jkl-preview api="{api}" token="{token}"></jkl-preview>
+          <jkl-clear-button on-click="{clear}"></jkl-clear-button>
+        </div>
       `;
     }
+    clear() { this.value = void 0; }
     init() {
-      if (!this.text) this.text = 'Select File';
+      if (!this.text) this.text = '请选择文件';
       this.input.addEventListener('change', event => this.change(event));
-      this.button = new SpanButton({ text: this.text }).renderTo(this.label);
-      this.preview = new Preview(this).renderTo(this);
-      this.cancelButton = new CancelButton({ onClick: () => this.value = null }).renderTo(this);
     }
     change(event) {
       let { target } = event;
-      let [ file ] = target.files;
+      let file = target.files[0];
       if (!file) return;
       this.button.element.classList.add('busy');
       api(this.api, { method: 'POST', body: file }).then(result => {
@@ -81,22 +106,11 @@ def((Button) => {
     get styleSheet() {
       return `
         :scope {
-          img {
-            display: none;
-            max-width: ${this.maxWidth || '50px'};
-            max-height: ${this.maxHeight || '50px'};
-            display: inline-block;
-            vertical-align: middle;
-            border-radius: 100%;
-            margin-left: .5em;
-          }
-          label {}
-          label ~ * { display: none; }
-          label[notEmpty=true] ~ * { display: inline-block; }
-          input { display: none; }
+          &[token=undefined] a { visibility: hidden; }
+          &[token=""] a { visibility: hidden; }
         }
       `;
     }
-  }
+  };
 
 });

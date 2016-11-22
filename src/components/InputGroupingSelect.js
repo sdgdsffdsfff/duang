@@ -1,75 +1,49 @@
-def((Input, InputSelect, FormItem) => {
-
-  class SubGroupMap extends Jinkela {
-    get value() {
-      return this.inputs.reduce((base, item) => {
-        base[item.key] = item.value;
-        return base;
-      }, {});
-    }
-    set value(value) {
-      this.inputs.forEach(item => {
-        item.value = value[item.key];
-      });
-    }
-    init() {
-      let { group, depot } = this;
-      let { id } = depot;
-      let action = id ? 'edit' : 'create';
-      group = JSON.parse(JSON.stringify(group)).filter(item => item[action] !== 'none');
-      group.forEach((item) => {
-        if (item[action] === 'readonly') {
-          if (!item.args) item.args = {};
-          item.args.readonly = true;
-        }
-      });
-      this.inputs = FormItem.cast(group).renderTo(this);
-      if (this.horizontal) this.element.setAttribute('data-horizontal', this.horizontal);
-    }
-    get tagName() { return 'table'; }
-    get styleSheet() {
-      return `
-        :scope {
-          font-size: 14px;
-          margin-top: 1em;
-          border-collapse: collapse;
-          &[data-horizontal] {
-            margin-top: 0;
-            display: inline-table;
-            vertical-align: middle;
-          }
-        }
-      `;
-    }
+def((Input, InputSelect, SubGroupMap) => class extends Jinkela {
+  get InputSelect() { return InputSelect; }
+  get template() {
+    return `
+      <div>
+        <jkl-input-select
+          ref="select"
+          options="{options}"
+          readonly="{readonly}"
+          onchange="{selectChange}"></jkl-input-select>
+      </div>
+    `;
   }
-
-  return class extends Jinkela {
-    init() {
-      let { options, readonly } = this;
-      const onChange = event => this.selectChange(event);
-      this.select = new InputSelect({ options, readonly, onChange }).renderTo(this);
-      this.selectChange();
-    }
-    selectChange() {
-      let { depot, horizontal } = this;
+  init() {
+    this.selectChange();
+  }
+  get selectChange() {
+    let value = () => {
+      let { depot } = this;
       let group = this.subGroupMap[this.select.value] || [];
-      if (group.length) { 
-        let table = new SubGroupMap({ group, horizontal, depot });
-        this.table = this.table ? table.renderWith(this.table) : table.renderTo(this);
+      if (group.length) {
+        let table = new SubGroupMap({ group, depot });
+        this.table = this.table ? table.renderWith(this.table) : table.to(this);
       } else {
         if (this.table) this.element.removeChild(this.table.element);
         this.table = null;
       }
-    }
-    get value() {
-      return Object.assign({ '': this.select.value }, this.table ? this.table.value : {});
-    }
-    set value(value) {
-      if (value === void 0) return;
-      this.select.value = value[''];
-      this.selectChange();
-      if (this.table) this.table.value = value;
-    }
+    };
+    Object.defineProperty(this, 'selectChange', { value, configurable: true });
+    return value;
   }
-
+  get value() {
+    let base = this.hideKey ? {} : { '': this.select.value };
+    return Object.assign(base, this.table ? this.table.value : {});
+  }
+  set value(value) {
+    if (value === void 0) return;
+    this.select.value = value[''];
+    this.selectChange();
+    if (this.table) this.table.value = value;
+  }
+  get styleSheet() {
+    return `
+      :scope {
+        text-align: left;
+      }
+    `;
+  }
 });

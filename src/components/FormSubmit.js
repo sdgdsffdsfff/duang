@@ -1,65 +1,57 @@
-def((Button, FormItem) => class extends FormItem {
-  init() {
-    this.title = '';
-  }
-  createInput() {
-    let submit = new Button({ text: '提交', onClick: event => this.submit() });
-    let back = new Button({ text: '返回', onClick: event => this.back(), color: '#ccc' });
-    return new class extends Jinkela {
-      init() {
-        submit.renderTo(this);
-        back.renderTo(this);
-      }
-      get styleSheet() {
-        return ':scope > * { margin-right: 1em; }'
-      }
-    };
-  }
-  back() {
-    if (depot.module === 'editor') {
-      history.back();
-    } else {
-      dialog.cancel();
+def((Button, ButtonHollow) => {
+
+  return class extends Jinkela {
+    get Button() { return Button; }
+    get ButtonHollow() { return ButtonHollow; }
+    get template() {
+      return `
+        <div>
+          <jkl-button onclick="{submit}">提交</jkl-button>
+          <jkl-button-hollow ref="backComponent" onclick="{back}">返回</jkl-button-hollow>
+        </div>
+      `;
     }
-  }
-  submit() {
-    let { form, depot } = this;
-    let { id, resolvedKey } = depot;
-    let value = JSON.stringify(form.value);
-    let $result;
-    if (id) {
-      $result = api([ resolvedKey, id ], { method: 'PUT', body: value });
-    } else {
-      $result = api(resolvedKey, { method: 'POST', body: value });
-    }
-    $result.then(doAction).then(result => {
-      if (window.depot.module === 'editor') {
-        history.back();
-      } else {
+    back() {
+      if (dialog.element.contains(this.element)) {
         dialog.cancel();
-        window.depot.refresh();
+      } else {
+        history.back();
       }
-    }, error => {
-      if (error) alert(error.message || error);
-    });
-  }
-  get styleSheet() {
-    return `
-      :scope {
-        td {
-          position: relative;
-          padding-top: calc(2em + 5px);
-          &::before {
-            content: '';
-            height: 1px;
-            left: 0;
-            right: 0;
-            background: #e4e4e4;
-            top: 1em;
-            position: absolute;
-          }
+    }
+    submit() {
+      this.backComponent.busy = true;
+      let { form, depot } = this;
+      let { id, resolvedKey } = depot;
+      let value = JSON.stringify(form.value);
+      let $result;
+      if (id) {
+        $result = api([ resolvedKey, id ], { method: 'PUT', body: value });
+      } else {
+        $result = api(resolvedKey, { method: 'POST', body: value });
+      }
+      return $result.then(doAction).then(result => {
+        if (window.depot.module === 'editor') {
+          history.back();
+        } else {
+          dialog.cancel();
+          window.depot.refresh();
         }
-      }
-    `;
-  }
+      }, error => {
+        if (error) alert(error.message || error);
+      }).then(() => {
+        this.backComponent.busy = false;
+      });
+    }
+    get styleSheet() {
+      return `
+        :scope {
+          border-top: 1px solid #e0e6ed;
+          margin-top: 1em;
+          padding-top: 1em;
+          :first-child { margin-right: 10px; }
+        }
+      `;
+    }
+  };
+
 });

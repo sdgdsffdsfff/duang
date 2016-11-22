@@ -1,64 +1,55 @@
-def((Input, Item, Button) => class extends Item {
+def((Input, Item) => class extends Item {
   init() {
-    this.input = new Input(this, { onReady: () => this.ready() }).renderTo(this);
-    new Button({ text: depot.getConst('Apply'), onClick: () => this.apply() }).renderTo(this);
-    this.element.setAttribute('data-filter-component', this.component);
-    if ('title' in this) this.element.setAttribute('data-filter-title', this.title + '：');
+    this.input = new Input(this, { onReady: () => this.ready() }).to(this);
+  }
+  get $promise() { return this.input.$promise; }
+  keydown({ keyCode, target }) {
+    if (target.tagName !== 'TEXTAREA' && keyCode === 13) this.apply();
   }
   ready() {
-    let { where } = depot;
+    let { where } = this.depot;
     let { key, squash } = this;
-    if (!(key in where)) return;
+    this.checked = key in where;
+    if (!this.checked) return;
     if (squash === 'direct') {
-      this.value = Object.assign({ '': where[key] }, where)
+      this.value = Object.assign({ '': where[key] }, where);
     } else {
       this.value = where[key];
     }
     this.defaultValue = this.value;
-    new Button({ text: depot.getConst('Clear'), onClick: () => this.clear(), color: '#ccc' }).renderTo(this);
   }
-  apply() {
-    let { uParams, where } = depot;
-    let { defaultValue, value, key, squash } = this;
-    if (squash === 'direct') {
-      if (defaultValue) Object.keys(defaultValue).forEach(key => delete where[key]);
-      where[key] = value[''];
-      delete value[''];
-      Object.assign(where, value);
-    } else {
-      where[key] = value;
-    }
-    uParams.where = JSON.stringify(where);
-    location.hash = new UParams(uParams);
-  }
-  clear() {
-    let { uParams, where } = depot;
-    let { defaultValue, key, squash } = this;
-    if (squash === 'direct') {
-      delete where[key];
-      Object.keys(defaultValue).forEach(key => delete where[key]);
-    } else {
-      delete where[key];
-    }
-    uParams.where = JSON.stringify(where);
-    location.hash = new UParams(uParams);
-  }
+  get checked() { return this.checkbox.checked; }
+  set checked(value) { this.checkbox.checked = value; }
   get value() { return this.input.value; }
   set value(value) { this.input.value = value; }
-  get tagName() { return `label`; }
+  get template() {
+    return `
+      <div on-keydown="{keydown}">
+        <label>
+          <span>{title}</span>
+          <input type="checkbox" ref="checkbox" if="{optional}" />
+        </label>
+      </div>
+    `;
+  }
   get styleSheet() {
     return `
       :scope {
-        &::before { content: attr(data-filter-title); }
+        &:first-child { margin-top: 0; }
         display: block;
-        margin-bottom: 1em;
+        margin-top: 1em;
         white-space: nowrap;
+        line-height: 28px;
         > * {
           display: inline-block;
-          vertical-align: middle;
+          vertical-align: top;
         }
-        > button {
-          margin-left: 1em;
+        > label {
+          min-width: 100px;
+        }
+        > input[type=checkbox] {
+          vertical-align: middle;
+          margin-right: 10px;
         }
       }
     `;

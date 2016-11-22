@@ -1,22 +1,33 @@
 def((ListControl, Table, TableTip, Pager) => class extends Jinkela {
+  get ListControl() { return ListControl; }
+  get Table() { return Table; }
+  get TableTip() { return TableTip; }
+  get Pager() { return Pager; }
+  get template() {
+    return `
+      <div>
+        <jkl-list-control depot="{depot}"></jkl-list-control>
+        <jkl-table depot="{depot}" data="{list}"></jkl-table>
+        <jkl-table-tip data="{list}" error="{error}"></jkl-table-tip>
+        <jkl-pager depot="{depot}" data="{list}" pagesize="{pageSize}"></jkl-pager>
+      </div>
+    `;
+  }
   load() {
-    let { queryParams, scheme, resolvedKey } = depot;
+    let { queryParams, scheme, resolvedKey } = this.depot;
     if (!scheme) return location.hash = '';
     return api(resolvedKey + '?' + queryParams);
   }
-  init() {
-    let { scheme } = depot;
-    new ListControl().renderTo(this);
-    let table = new Table().renderTo(this);
+  beforeParse(params) {
+    this.depot = params.depot || depot;
+    let { scheme } = this.depot;
     let { pageSize, fields = [] } = scheme;
+    this.pageSize = pageSize;
     if (!fields.length) return; // Load data if "fields" exists
-    let tip = new TableTip().renderTo(this);
     this.load().then(list => {
-      table.render(list);
-      tip.render(list);
-      if (pageSize) new Pager({ list }).renderTo(this);
+      this.list = list;
     }, error => {
-      tip.render(error);
+      this.error = error;
     });
   }
 });

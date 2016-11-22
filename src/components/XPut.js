@@ -1,10 +1,12 @@
 def((Item) => class extends Item {
   get tagName() { return `span`; }
+  set depot(ignore) {}
+  get depot() { return this.parent.depot || window.depot; }
   didMount() {
     this.resolveAt().then(() => this.buildComponent());
   }
   resolveAt() {
-    let depot = this.depot = this.parent.depot || window.depot;
+    let { depot } = this;
     let path = [];
     if (depot.scheme) path.push(depot.resolvedKey);
     let { query } = this;
@@ -25,14 +27,14 @@ def((Item) => class extends Item {
           }
         }
       });
-      return Promise.all(tasks).then(() => base);
+      return Promise.all(tasks).then(() => {});
     }(this).catch(error => {
       throw new Error(`Component "${component}" args loading error with "${error.message}"`);
     });
   }
   get $promise() {
-    let resolve;
-    let value = new Promise($resolve => resolve = $resolve);
+    let resolve, reject;
+    let value = new Promise((...args) => [ resolve, reject ] = args);
     value.then(() => {
       if ('$value' in this) {
         this.value = this.$value;

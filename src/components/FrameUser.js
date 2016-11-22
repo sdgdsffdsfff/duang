@@ -8,14 +8,16 @@ def((Output) => class extends Jinkela {
       component = 'HTML';
       args = { html: '{value}' };
     }
-    let output = new Output({ component, args, value }).renderTo(this);
+    let output = new Output({ component, args, value }).to(this);
   }
   get styleSheet() {
     return `
       :scope {
-        float: right;
+        flex: 1;
+        text-align: right;
+        width: 100px;
         padding-right: 1em;
-        font-size: 12px;
+        font-size: 14px;
       }
     `;
   }

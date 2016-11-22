@@ -1,24 +1,31 @@
 def(() => class extends Jinkela {
   init() {
-    this.element.textContent = 'Loading ...';
+    this.element.textContent = '正在拼命加载 ...';
   }
-  render(result) {
-    if (result && result instanceof Array) {
-      if (result.length) {
-        this.element.style.display = 'none';
-      } else {
-        this.element.textContent = 'No Data';
-      }
+  set error(error) {
+    if (!error) return;
+    this.element.style.color = '#ff4949';
+    this.element.innerHTML = error.message || error.name || JSON.stringify(error);
+  }
+  set data(list) {
+    if (!(list instanceof Array)) list = [];
+    if (list.length) {
+      this.element.style.display = 'none';
     } else {
-      this.element.textContent = result.message || result;
+      this.element.textContent = '没有数据';
     }
   }
   get styleSheet() {
     return `
       :scope {
         text-align: center;
-        font-size: 24px;
-        padding: 1em;
+        font-size: 16px;
+        padding: 3em;
+        color: inherit;
+        opacity: .65;
+        white-space: pre;
+        margin: 0 1em;
+        border-radius: 4px;
       }
     `;
   }

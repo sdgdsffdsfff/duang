@@ -19,7 +19,7 @@ def((Button) => class extends Jinkela {
     this.yes = typeof this.yes === 'string' ? { text: this.yes } : this.yes;
     this.yesButton = new Button(this.yes, { onClick: onYes });
 
-    if (!this.cancel) this.cancel = { text: 'Cancel', color: '#ccc' };
+    if (!this.cancel) this.cancel = { text: 'Cancel', color: '#D3DCE6' };
     this.cancel = typeof this.cancel === 'string' ? { text: this.cancel } : this.cancel;
     this.cancelButton = new Button(this.cancel, { onClick: onCancel });
   }
@@ -41,7 +41,7 @@ def((Button) => class extends Jinkela {
   get template() {
     return `
       <div>
-        <h3>{text}</h3>
+        <h5>{text}</h5>
         <div>
           <meta ref="yesButton" />
           <meta ref="cancelButton" />
@@ -52,15 +52,16 @@ def((Button) => class extends Jinkela {
   get styleSheet() {
     return `
       :scope {
-        h3 {
+        h5 {
           margin: 0 0 2em 0;
-          font-size: 18px;
+          font-size: 14px;
+          font-weight: normal;
         }
         button {
-          font-size: 16px;
+          font-size: 14px;
           margin: 0 1em;
         }
-        padding: 2em;
+        padding: 1em;
       }
     `;
   }
