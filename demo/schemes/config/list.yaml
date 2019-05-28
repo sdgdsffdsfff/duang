@@ -1,0 +1,165 @@
+- title: "配置 - 列表 - 最简单的列表"
+  key: "normal-list"
+  fields:
+    - key: "id"
+      title: "ID"
+    - key: "type"
+      title: "类型"
+    - key: "title"
+      title: "名称"
+    - key: "description"
+      title: "描述"
+
+- title: "配置 - 列表 - 列表中使用组件"
+  key: "components-list"
+  fields:
+    - key: "id"
+      title: "ID"
+    - key: "title"
+      title: "<font color=red>加特技</font>"
+    - key: "value"
+      title: "排序"
+      sortable: true
+    - key: "description"
+      title: "悬停提示控件"
+      component: "TextTip"
+      args:
+        tip: "无提示文字"
+        text: "悬停显示描述"
+    - key: "img"
+      title: "图片控件"
+      component: "Image"
+
+- title: "配置 - 列表 - 相当复杂的列表"
+  key: "complex-list"
+  gentleRefreshing: true
+  listSelector: true
+  actions:
+    - title: www.ele.me
+      method: open
+      href: https://www.ele.me
+    - title: The-Action
+      method: post
+      api: theAction
+    - title: read
+      method: read
+      target: dialog
+      api: theAction
+  inputs:
+    - title: 名称
+      key: title
+    - title: 描述
+      component: Text
+      key: description
+  caption:
+    - component: "HTML"
+      args:
+        html: "数据加载时间 {value}"
+        '@defaultValue': "locale-datetime"
+  fields:
+    - key: "id"
+      title: "ID"
+    - key: "type"
+      title: "类型"
+    - key: "title"
+      title: "名称"
+    - key: "description"
+      title: "描述"
+  headers:
+    - component: "AutoRefresh"
+      args:
+        interval: 3000
+  operations:
+    - title: "批量删除"
+      method: "delete"
+      query: true
+
+- title: "配置 - 列表 - 可全选"
+  key: "the-list-data?2"
+  listSelector: true
+  actions:
+    - title: "www.ele.me"
+      method: "open"
+      href: "https://www.ele.me"
+    - title: "The-Action"
+      method: "post"
+      api: "theAction"
+  fields:
+    - key: "id"
+      title: "ID"
+      sortable: true
+    - key: "a"
+      title: "<font color=red>A</font>"
+      component: "TextTip"
+    - key: "img"
+      title: "图片"
+      component: "Image"
+    - key: "c"
+      component: "QRCode"
+      args:
+        defaultValue: "hehe"
+      title: "QRCode"
+  operations:
+    - title: "批量删除"
+      method: "delete"
+      query: true
+
+- title: "配置 - 列表 - 分页"
+  key: "pager-list-data"
+  countable: 5
+  pageSize: 10
+  module: "list"
+  fields:
+    - key: "id"
+      title: "ID"
+    - key: "a"
+      title: "A"
+    - key: "b"
+      title: "B"
+      component: "Clipboard"
+
+- title: "配置 - 列表 - 合并单元格"
+  key: "mergable-list"
+  module: "list"
+  groupBy:
+    - "type"
+  actions:
+    - method: "post"
+      title: "处理"
+  fields:
+    - key: "type"
+      title: "Type"
+    - key: "name"
+      title: "Name"
+    - key: "tag"
+      title: "Tag"
+      labelText: "自定义文本"
+    - key: "value"
+      title: "Value"
+      aggregate: "sum"
+
+- title: "配置 - 列表 - 链接到其它页面"
+  key: "link-list"
+  fields:
+    - key: "id"
+      title: "ID"
+    - key: "type"
+      title: "类型"
+    - key: "title"
+      title: "名称"
+    - key: "link"
+      title: "链接"
+      component: Link2
+      args:
+        title: 链接
+        module: list
+        key: 'the-filter?_=1'
+
+- title: "配置 - 列表 - 空列表"
+  key: "empty-list"
+  module: "list"
+  fields:
+    - key: "id"
+      title: "ID"
+    - key: "a"
+      title: "A"

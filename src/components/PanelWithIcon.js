@@ -1,15 +1,21 @@
-def(() => class extends Jinkela {
-  static popup(...args) { dialog.popup(new this(...args)); }
+def((Output) => class extends Jinkela {
+  static popup(...args) {
+    return new Promise(resolve => {
+      let ins = new this(...args);
+      dialog.popup(ins);
+      dialog.once('dialogcancel', () => resolve(ins.result));
+    });
+  }
   init() {
     this.title = this.title || this.defaultTitle;
-    this.text = this.text || this.defaultText;
+    Output.createAny(this.text || this.defaultText).to(this.content);
   }
   get template() {
     return `
       <table>
         <tr>
           <td>${this.iconTemplate}</td>
-          <td>{text}</td>
+          <td ref="content"></td>
         </tr>
       </table>
     `;

@@ -1,0 +1,84 @@
+[
+
+  {
+    "key": "Input::Suggestion",
+    "title": "组件 - 其它 - Suggestion",
+    "module": "editor",
+    "inputs": [
+      {
+        "description": "必选",
+        "key": "suggestion1", "component": "Suggestion", "title": "带描述",
+        "args": { "api": "value-list" }
+      },
+      {
+        "key": "suggestion2", "component": "Suggestion", "title": "Placeholder",
+        "args": { "api": "value-list", "placeholder": "placeholder" }
+      },
+      {
+        "key": "suggestion3", "component": "Suggestion", "title": "设置宽度",
+        "args": { "api": "value-list", "width": 100 }
+      },
+      {
+        "key": "suggestion4", "component": "Suggestion", "title": "有默认值",
+        "args": { "api": "value-list", "defaultValue": "hehe" }
+      },
+      {
+        "key": "suggestion5", "component": "Suggestion", "title": "正常",
+        "args": { "api": "empty-list" }
+      },
+      {
+        "key": "suggestion6", "component": "Suggestion", "title": "空提示",
+        "args": { "api": "empty-list", "emptyTip": "并没有内容" }
+      },
+      {
+        "key": "suggestion7", "component": "Suggestion", "title": "",
+        "args": { "api": "empty-list", "width": 100, "emptyTip": "并没有内容" }
+      }
+    ]
+  },
+
+  {
+    "key": "Input::TagCollector",
+    "title": "组件 - 其它 - TagCollector",
+    "module": "editor",
+    "inputs": [
+      {
+        "key": "tagCollector1", "component": "TagCollector", "title": "正常",
+        "args": { "api": "value-list" }
+      },
+      {
+        "key": "tagCollector2", "component": "TagCollector", "title": "设置宽度",
+        "args": { "api": "value-list", "width": 500 }
+      },
+      {
+        "key": "tagCollector3", "component": "TagCollector", "title": "带默认值",
+        "args": { "api": "value-list", "defaultValue": [ "item 1", "hehe" ] }
+      },
+      {
+        "key": "tagCollector4", "component": "TagCollector", "title": "空提示",
+        "args": { "api": "empty-list", "emptyTip": "并没有内容" }
+      },
+      {
+        "key": "tagCollector5", "component": "TagCollector", "title": "Placeholder",
+        "args": { "api": "empty-list", "placeholder": "placeholder" }
+      },
+      {
+        "key": "tagCollector6", "component": "TagCollector", "title": "api 带参数",
+        "args": { "api": "empty-list?hehe=123" }
+      }
+    ]
+  },
+
+  {
+    "key": "Input::Custom",
+    "title": "组件 - 其它 - Custom",
+    "module": "editor",
+    "inputs": [
+      {
+        "key": "custom1", "component": "https://fuss10.elemecdn.com/c/d6/9a844cf9941910a965c88b5af4f70js.js",
+        "title": "外部组件", "args": { "defaultValue": "这是一个外部组件，呵呵" }
+      }
+    ]
+  }
+
+]

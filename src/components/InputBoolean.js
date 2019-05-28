@@ -1,6 +1,8 @@
 def(() => class extends Jinkela {
+
   get value() { return this.$value; }
-  set value(value) {
+
+  set value(value = this.defaultValue) {
     if (typeof value === 'string') {
       try {
         value = JSON.parse(value);
@@ -10,22 +12,24 @@ def(() => class extends Jinkela {
     }
     this.element.dataset.value = this.$value = !!value;
   }
+
   init() {
     Object.defineProperty(this.element, 'value', {
       get: () => this.value,
-      set: value => this.value = value
+      set: value => (this.value = value)
     });
-    this.value = !!this.$value;
+    this.value = this.value;
     if (this.readonly) {
       if (this.readonly) this.element.setAttribute('readonly', 'readonly');
     } else {
-      this.element.addEventListener('click', () => this.value = !this.$value);
+      this.element.addEventListener('click', () => (this.value = !this.$value));
     }
     let { text = {} } = this;
-    this.element.setAttribute('data-text-true', text.true || 'true');
-    this.element.setAttribute('data-text-false', text.false || 'false');
+    this.element.setAttribute('data-text-true', text.true || '开');
+    this.element.setAttribute('data-text-false', text.false || '关');
     if (this.fontSize) this.element.style.fontSize = this.fontSize + 'px';
   }
+
   get styleSheet() {
     return `
       :scope {
@@ -37,7 +41,11 @@ def(() => class extends Jinkela {
         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
         display: inline-block;
         cursor: pointer;
-        &[readonly] { cursor: default; }
+        text-align: left;
+        &[readonly] {
+          cursor: not-allowed;
+          filter: saturate(0);
+        }
         &:before {
           content: attr(data-text-false);
           display: inline-block;
@@ -59,4 +67,5 @@ def(() => class extends Jinkela {
       }
     `;
   }
+
 });

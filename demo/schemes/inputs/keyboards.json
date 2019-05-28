@@ -1,0 +1,115 @@
+[
+
+  {
+    "key": "Input::String",
+    "title": "组件 - 键盘输入类 - String",
+    "module": "editor",
+    "inputs": [
+      { "key": "string1", "component": "String", "title": "常规" },
+      { "key": "string2", "component": "String", "title": "默认值", "args": { "defaultValue": "hehe" } },
+      { "key": "string2", "component": "String", "title": "默认值2", "args": { "defaultValue": "$.depot.key" } },
+      { "key": "string3", "component": "String", "title": "最大限制", "args": { "maxLength": 3 } },
+      { "key": "string4", "component": "String", "title": "最小限制", "args": { "minLength": 3 } },
+      { "key": "string5", "component": "String", "title": "非空", "args": { "notEmpty": true } },
+      { "key": "string6", "component": "String", "title": "自动清空头尾空格", "args": { "autoTrim": true } }
+    ]
+  },
+
+  {
+    "key": "Input::Text",
+    "title": "组件 - 键盘输入类 - Text",
+    "module": "editor",
+    "inputs": [
+      { "key": "text1", "component": "Text", "title": "常规" },
+      { "key": "text2", "component": "Text", "title": "默认值", "args": { "defaultValue": "hehe\nhehe" } },
+      { "key": "text3", "component": "Text", "title": "最大限制", "args": { "maxLength": 3 } },
+      { "key": "text4", "component": "Text", "title": "最小限制", "args": { "minLength": 3 } },
+      { "key": "text5", "component": "Text", "title": "非空", "args": { "notEmpty": true } },
+      { "key": "text6", "component": "Text", "title": "自动清空头尾空格", "args": { "autoTrim": true } }
+    ]
+  },
+
+  {
+    "key": "Input::TextAround",
+    "title": "组件 - 键盘输入类 - TextAround",
+    "module": "editor",
+    "inputs": [
+      {
+        "key": "textAround1", "component": "TextAround", "title": "双标签",
+        "args": { "component": "String", "before": "总计", "after": "吨" }
+      },
+      {
+        "key": "textAround2", "component": "TextAround", "title": "前标记，带宽度",
+        "args": { "component": "String", "args": { "width": 50 }, "before": "总计" }
+      },
+      {
+        "key": "textAround3", "component": "TextAround", "title": "后标记",
+        "args": { "component": "String", "after": "公斤" }
+      },
+      {
+        "key": "textAround3", "component": "TextAround", "title": "数字",
+        "args": { "component": "Number", "after": "克" }
+      }
+    ]
+  },
+
+  {
+    "key": "Input::Number",
+    "title": "组件 - 键盘输入类 - Number",
+    "module": "editor",
+    "inputs": [
+      { "key": "number1", "component": "Number", "title": "正常" },
+      { "key": "number2", "component": "Number", "title": "默认值", "args": { "defaultValue": "123.456" } },
+      { "key": "number3", "component": "Number", "title": "非数字", "args": { "defaultValue": "a" } },
+      { "key": "number4", "component": "Number", "title": "空默认值", "args": { "defaultValue": "" } },
+      {
+        "key": "number5", "component": "Number", "title": "保留两位",
+        "args": { "defaultValue": "3.1415926", "decimal": 2 }
+      },
+      {
+        "key": "number6", "component": "Number", "title": "保留整数",
+        "args": { "defaultValue": "3.1415926", "decimal": 0 }
+      }
+    ]
+  },
+
+  {
+    "key": "Input::Password",
+    "title": "组件 - 键盘输入类 - Password",
+    "module": "editor",
+    "inputs": [
+      { "key": "password1", "component": "Password", "title": "常规" },
+      { "key": "password2", "component": "Password", "title": "placeholder", "args": { "placeholder": "请输入密码" } },
+      { "key": "password3", "component": "Password", "title": "width 60", "args": { "width": 60 } },
+      { "key": "password4", "component": "Password", "title": "默认值", "args": { "defaultValue": "hehe" } },
+      { "key": "password5", "component": "Password", "title": "最大限制", "args": { "maxLength": 3 } },
+      { "key": "password6", "component": "Password", "title": "最小限制", "args": { "minLength": 3 } },
+      { "key": "password7", "component": "Password", "title": "非空", "args": { "notEmpty": true } },
+      { "key": "password8", "component": "Password", "title": "自动清空头尾空格", "args": { "autoTrim": true } }
+    ]
+  },
+
+  {
+    "key": "Input::Markdown",
+    "title": "组件 - 键盘输入类 - Markdown",
+    "module": "editor",
+    "inputs": [
+      { "key": "md1", "component": "Markdown", "title": "正常" },
+      { "key": "md2", "component": "Markdown", "title": "默认值", "args": { "defaultValue": "# hehe" } }
+    ]
+  },
+
+  {
+    "key": "Input::Code",
+    "title": "组件 - 键盘输入类 - Code",
+    "module": "editor",
+    "inputs": [
+      { "key": "code1", "component": "Code", "title": "正常" },
+      {
+        "key": "code2", "component": "Code", "title": "默认值",
+        "args": { "defaultValue": "console.log('hehe');", "mode": "javascript" }
+      }
+    ]
+  }
+
+]

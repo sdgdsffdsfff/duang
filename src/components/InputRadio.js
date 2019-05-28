@@ -1,53 +1,39 @@
-def((Item, Value) => {
+def((Radio, Item, Value) => {
 
-  class InputRadioItem extends Item {
-    init() {
-      if (this.readonly) this.input.setAttribute('disabled', 'disabled');
-    }
-    get template() {
-      return `
-        <label>
-          <span>{text}</span>
-          <input ref="input" type="radio" name="n" value="{value}" />
-        </label>
-      `;
-    }
-    get checked() { return this.input.checked; }
-    set checked(value) { this.input.checked = value; }
+  return class extends Value {
     get styleSheet() {
       return `
         :scope {
-          margin-right: 1em;
-          &:last-child {
-            margin-right: 0;
+          display: inline-block;
+          vertical-align: middle;
+          > * {
+            vertical-align: top;
           }
         }
       `;
     }
-  }
-
-  return class extends Value {
-    get template() { return `<form></form>`; }
-    get styleSheet() {
-      return `
-        :scope {
-          margin: 0;
-        }
-      `;
+    change(event) {
+      if (this.changing) return;
+      this.changing = true;
+      this.list.forEach(item => (item.checked = item.element === event.target));
+      this.changing = false;
     }
     init() {
+      this.element.addEventListener('change', event => this.change(event));
       let { options, readonly } = this;
-      let list = Object.keys(options).map(key => {
-        return { value: key, text: options[key] };
-      });
-      this.list = InputRadioItem.cast(list, { readonly }).to(this);
+      let list = options instanceof Array ? options : Object.keys(options).map(key => ({ value: key, text: options[key] }));
+      list = list.map(raw => Object.assign({}, raw, { readonly }));
+      this.list = Radio.from(list).to(this);
+      if (!this.$hasValue) this.value = void 0;
     }
-    set value(value) {
-      let set = new Set(value);
-      this.list.forEach(item => item.checked = set.has(item.value));
+    set value(value = this.defaultValue) {
+      this.$hasValue = true;
+      if (this.list.length === 0) return;
+      if (!this.list.some(item => (item.checked = item.value === value))) this.list[0].checked = true;
     }
     get value() {
-      return this.list.filter(item => item.checked).map(item => item.input.value) + '';
+      let found = this.list.find(item => item.checked);
+      return found && found.value;
     }
   };
 

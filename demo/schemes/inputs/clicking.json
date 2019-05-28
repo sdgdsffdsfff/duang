@@ -1,0 +1,235 @@
+[
+
+  {
+    "key": "Input::Select",
+    "title": "组件 - 点选类 - Select",
+    "module": "editor",
+    "inputs": [
+      { "key": "select1", "component": "Select", "title": "下拉", "args": { "options": { "1": "one", "2": "two" } } },
+      {
+        "key": "select2", "component": "Select", "title": "下拉",
+        "args": { "options": { "1": "one", "2": "two" }, "defaultValue": "2" }
+      }
+    ]
+  },
+
+  {
+    "key": "Input::Radio",
+    "title": "组件 - 点选类 - Radio",
+    "module": "editor",
+    "inputs": [
+      { "key": "radio1", "component": "Radio", "title": "单选", "args": { "options": { "1": "one", "2": "two" } } },
+      {
+        "key": "radio2", "component": "Radio", "title": "单选",
+        "args": { "options": { "1": "one", "2": "two" }, "defaultValue": "2" }
+      }
+    ]
+  },
+
+  {
+    "key": "Input::Checkbox",
+    "title": "组件 - 点选类 - Checkbox",
+    "module": "editor",
+    "inputs": [
+      {
+        "key": "checkbox1", "component": "Checkbox", "title": "多选",
+        "args": { "options": { "1": "one", "2": "two" } }
+      },
+      {
+        "key": "checkbox2", "component": "Checkbox", "title": "多选",
+        "args": { "options": { "1": "one", "2": "two" }, "defaultValue": "2" }
+      },
+      {
+        "key": "checkbox3", "component": "Checkbox", "title": "多选",
+        "args": { "options": { "1": "one", "2": "two" }, "defaultValue": [ "1", "2" ] }
+      },
+      {
+        "key": "checkbox4", "component": "Checkbox", "title": "多选",
+        "args": { "options": { "1": "one", "2": "two" }, "defaultValue": { "all": true } }
+      }
+    ]
+  },
+
+  {
+    "key": "Input::Boolean",
+    "title": "组件 - 点选类 - Boolean",
+    "module": "editor",
+    "inputs": [
+      { "key": "bool1", "component": "Boolean", "title": "布尔" },
+      { "key": "bool2", "component": "Boolean", "title": "布尔", "args": { "defaultValue": true } }
+    ]
+  },
+
+  {
+    "key": "Input::FileBase64",
+    "title": "组件 - 点选类 - FileBase64",
+    "module": "editor",
+    "inputs": [
+      { "key": "file1", "component": "FileBase64", "title": "文件 Base64" },
+      { "key": "file2", "component": "FileBase64", "title": "默认值", "args": { "defaultValue": "aGVoZQo=" } },
+      { "key": "file3", "component": "FileBase64", "title": "非空", "args": { "notEmpty": true } }
+    ]
+  },
+
+  {
+    "key": "Input::FileToken",
+    "title": "组件 - 点选类 - FileToken",
+    "module": "editor",
+    "inputs": [
+      {
+        "key": "file1", "component": "FileToken", "title": "常规",
+        "args": { "api": "/upload", "disableEncode": true }
+      },
+      { "key": "file2", "component": "FileToken", "title": "默认值",
+        "args": { "defaultValue": "logo.png", "api": "/upload" }
+      },
+      {
+        "key": "file3", "title": {
+          "component": "InputGrouping", "args": {
+            "mode": "line", "inputs": [
+              {
+                "title": "限制 png 类型", "component": "OutputIconTip",
+                "args": { "defaultValue": { "tip": "type png" } }
+              }
+            ]
+          }
+        },
+        "component": "FileToken", "args": { "limit": { "type": "png" } }
+      },
+      {
+        "key": "file4", "component": "FileToken", "title": "限制最大 100",
+        "args": { "limit": { "maxSize": 100 } }
+      },
+      {
+        "key": "file5", "component": "FileToken", "title": "限制 [,100]x[]",
+        "args": { "limit": { "maxWidth": 100 } }
+      },
+      {
+        "key": "file6", "component": "FileToken", "title": "限制 100x100",
+        "args": { "limit": { "width": 100, "height": 100 } }
+      },
+      {
+        "key": "file7", "component": "FileToken", "title": "限制 100x[100,200]",
+        "args": { "limit": { "width": 100, "minHeight": 100, "maxHeight": 200 } }
+      },
+      {
+        "key": "file8", "component": "FileToken", "title": "disable*",
+        "args": {
+          "disableCredentialsForDownload": true,
+          "defaultIcon": "https://fuss10.elemecdn.com/3/81/176119defd395cf61c1343af79e26png.png",
+          "disableEncode": true,
+          "defaultValue": "https://fuss10.elemecdn.com/e/ac/f2b009ddbe51831a778a0ee3e2c20xlsx.xlsx"
+        }
+      },
+      {
+        "key": "file9", "component": "FileToken", "title": "非空",
+        "args": { "notEmpty": true, "api": "filetoken" }
+      }
+    ]
+  },
+
+  {
+    "key": "Input::FileTokenWithInfo",
+    "title": "组件 - 点选类 - FileTokenWithInfo",
+    "module": "editor",
+    "inputs": [
+      { "key": "file5", "component": "FileTokenWithInfo", "title": "详细的文本 Token" },
+      {
+        "key": "file6", "component": "FileTokenWithInfo", "title": "详细的文本 Token",
+        "args": { "defaultValue": { "api": "/", "token": "demo.png" } }
+      },
+      {
+        "key": "file3", "component": "FileTokenWithInfo", "title": "详细的文本 Token（png only）",
+        "args": { "limit": { "type": "png" } }
+      }
+    ]
+  },
+
+  {
+    "key": "Input::Cascader",
+    "title": "组件 - 点选类 - Cascader",
+    "module": "editor",
+    "inputs": [
+      { "key": "cascader1", "component": "Cascader", "title": "级联", "args": { "options": [ { "value": "item 1" } ] } },
+      {
+        "key": "cascader2", "component": "Cascader", "title": "级联",
+        "args": { "options": [ { "value": "item 1" } ], "defaultValue": [ "item 1" ] }
+      }
+    ]
+  },
+
+  {
+    "key": "Input::Forest",
+    "title": "组件 - 点选类 - Forest",
+    "module": "editor",
+    "inputs": [
+      {
+        "key": "cascader1", "component": "Forest", "title": "正常",
+        "args": {
+          "options": [
+            { "id": 1, "text": "item 1" },
+            { "id": 2, "parentId": 1, "text": "item 2" },
+            { "id": 3, "parentId": 1, "text": "item 3" }
+          ]
+        }
+      },
+      {
+        "key": "cascader2", "component": "Forest", "title": "默认值",
+        "args": {
+          "options": [
+            { "id": 1, "text": "item 1" },
+            { "id": 2, "parentId": 1, "text": "item 2" },
+            { "id": 3, "parentId": 1, "text": "item 3" }
+          ],
+          "defaultValue": [ 1 ]
+        }
+      },
+      {
+        "key": "cascader3", "component": "Forest", "title": "字段别名",
+        "args": {
+          "options": [
+            { "a": 1, "c": "item 1" },
+            { "a": 2, "b": 1, "c": "item 2" },
+            { "a": 3, "b": 1, "c": "item 3" }
+          ],
+          "defaultValue": [ 1 ],
+          "idAlias": "a",
+          "parentIdAlias": "b",
+          "textAlias": "c"
+        }
+      },
+      {
+        "key": "cascader4", "component": "Forest", "title": "只能选一个",
+        "args": {
+          "options": [
+            { "id": 1, "text": "item 1" },
+            { "id": 2, "parentId": 1, "text": "item 2" },
+            { "id": 3, "parentId": 1, "text": "item 3" }
+          ],
+          "maxLength": 1,
+          "noRemovingAnimation": true
+        }
+      }
+    ]
+  },
+
+  {
+    "key": "Input::ImageSelector",
+    "title": "组件 - 点选类 - ImageSelector",
+    "module": "editor",
+    "inputs": [
+      {
+        "key": "imageSelector1", "component": "ImageSelector", "title": "图片选择",
+        "args": { "@options": "imageselector-options" }
+      },
+      {
+        "key": "imageSelector1", "component": "ImageSelector", "title": "图片选择",
+        "args": {
+          "@options": "imageselector-options",
+          "defaultValue": "item 2"
+        }
+      }
+    ]
+  }
+
+]

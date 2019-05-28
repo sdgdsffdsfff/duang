@@ -3,15 +3,18 @@ def((Item) => {
   class InputSelectItem extends Item {
     get tagName() { return 'option'; }
     init() {
+      this.element.jinkela = this;
       this.element.setAttribute('value', this.value);
       this.element.textContent = this.text;
     }
   }
 
   return class extends Jinkela {
-    get tagName() { return `select`; }
+    get tagName() { return 'select'; }
     init() {
       this.element.addEventListener('change', event => this.change(event));
+      this.initOptions();
+      this.value = this.$hasValue ? this.$value : void 0;
     }
     get readonly() { return this.element.hasAttribute('disabled'); }
     set readonly(value) {
@@ -21,12 +24,15 @@ def((Item) => {
         this.element.removeAttribute('disabled');
       }
     }
-    set options(options) {
+    initOptions() {
+      let { options } = this;
       while (this.element.firstChild) this.element.firstChild.remove();
-      if (!options) return;
-      if (!(options instanceof Array)) {
-        options = Object.keys(options).map(key => ({ text: options[key], value: key }));
+      if (options instanceof Array) {
+        options = options.slice(0);
+      } else {
+        options = Object.keys(Object(options)).map(key => ({ text: options[key], value: key }));
       }
+      if ('null' in this) options.unshift({ text: this.null, value: null });
       InputSelectItem.cast(options).to(this);
     }
     change() {
@@ -56,8 +62,15 @@ def((Item) => {
         }
       `;
     }
-    get value() { return this.element.value; }
-    set value(value) { this.element.value = value; }
+    get value() {
+      if (!this.keepValueType) return this.element.value;
+      let [ option ] = this.element.selectedOptions;
+      return option && option.jinkela && option.jinkela.value;
+    }
+    set value(value = this.defaultValue) {
+      this.$hasValue = true;
+      if (value !== void 0) this.$value = this.element.value = value;
+    }
   };
 
 });

@@ -1,13 +1,19 @@
 def((XPut) => class extends XPut {
+  static createAny(what, params) {
+    switch (typeof what) {
+      case 'object':
+        return new this(what, params);
+      case 'string':
+      default:
+        return new this({ component: 'HTML', args: { html: String(what) } }, params);
+    }
+  }
+  get hint() { return 'Output'; }
+  get defaultComponent() { return 'HTML'; }
   buildComponent() {
-    let { component, args = {}, params, query, depot, value } = this;
-    return req('Output' + component).catch(() => {
-      throw new Error(`Unknown component "${component}"`);
-    }).then(Component => {
-      this.result = new Component(args, { value, depot }).to(this);
-      this.$promise.resolve();
-    }, error => {
-      this.element.textContent = error.message;
+    let { args = {}, depot, value } = this;
+    return req(this.componentName).then(Component => {
+      this.result = new Component(args, { value, depot }).to(this.element);
     });
   }
 });

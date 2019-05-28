@@ -1,6 +1,6 @@
 def(() => class extends Jinkela {
   get value() { return this.$value; }
-  set value(value) {
+  set value(value = this.defaultValue) {
     if (this.$value === value) return;
     this.$value = value;
     this.render();
@@ -10,11 +10,22 @@ def(() => class extends Jinkela {
     this.value = this.value;
   }
   render() {
-    this.element.innerHTML = String(this.html).replace(/\{(.*?)\}/g, ($0, key) => {
-      let base = typeof this.value === 'string' ? this : this.value;
-      return key.split('.').reduce((base, name) => Object(base)[name], base);
-    }).replace(/<script>([\s\S]*?)<\/script>/g, ($0, code) => {
-      return new Function(`return (${code})`)();
-    });
+    if ('html' in this) {
+      this.element.innerHTML = String(this.html).replace(/\{(.*?)\}/g, ($0, key) => {
+        let base = this.value instanceof Object ? this.value : this;
+        return key.split('.').reduce((base, name) => Object(base)[name], base);
+      }).replace(/<script>([\s\S]*?)<\/script>/g, ($0, code) => {
+        return new Function(`return (${code})`)();
+      });
+    } else {
+      this.element.innerHTML = this.value === void 0 ? '' : this.value;
+    }
+  }
+  get styleSheet() {
+    return `
+      :scope {
+        overflow: hidden;
+      }
+    `;
   }
 });

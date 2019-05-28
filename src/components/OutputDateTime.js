@@ -1,6 +1,11 @@
 def(() => class extends Jinkela {
-  init() {
-    let { value, format = '$Y-$M-$D', offset } = this;
+
+  update() {
+    let { value, format = '$Y-$M-$D', offset, mode } = this;
+    if (mode === 'UNIX_TIMESTAMP') {
+      value = typeof value === 'number' ? value * 1000 : value;
+      offset = typeof offset === 'number' ? offset * 1000 : offset;
+    }
     value = new Date(value);
     if (offset) value = new Date(value.getTime() + offset);
     const lz = date => (date + '').replace(/\b\d\b/g, '0$&');
@@ -16,4 +21,23 @@ def(() => class extends Jinkela {
       }
     });
   }
+
+  get format() { return this.$format; }
+  set format(value) {
+    Object.defineProperty(this, '$format', { configurable: true, value });
+    this.update();
+  }
+
+  get format() { return this.$format; }
+  set format(value) {
+    Object.defineProperty(this, '$format', { configurable: true, value });
+    this.update();
+  }
+
+  get value() { return this.$value; }
+  set value(value) {
+    Object.defineProperty(this, '$value', { configurable: true, value });
+    this.update();
+  }
+
 });

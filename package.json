@@ -1,0 +1,31 @@
+{
+  "name": "eleme-duang",
+  "version": "1.0.0",
+  "description": "docs => https://eleme.github.io/duang/docs/",
+  "main": "src/duang.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "lint": "eslint . --fix",
+    "test": "eslint . --fix && ui-tester-start tests",
+    "install": "ln -f pre-commit .git/hooks"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eleme/duang.git"
+  },
+  "author": "rongyi.liu@ele.me",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eleme/duang/issues"
+  },
+  "homepage": "https://github.com/eleme/duang#readme",
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^4.13.1",
+    "eslint-config-elemefe": "^0.3.0",
+    "ui-tester": "^1.2.0"
+  }
+}
